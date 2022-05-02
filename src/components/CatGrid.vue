@@ -2,6 +2,8 @@
 import { reactive, watch, computed, ref } from 'vue';
 import { getCatsByBreed } from '../services/cat-api-service';
 
+import CatCard from '../components/CatCard.vue';
+
 const props = defineProps({
     breedId: {
         type: String,
@@ -39,8 +41,19 @@ watch(
     <div v-else-if="isEmpty">
         No results
     </div>
-    <div v-else>
-        {{ props.breedId }}
-        <pre>{{ cats }}</pre>
+    <div class="d-grid gap-4" v-else>
+        <b-row>
+            <b-col
+                v-for="cat in cats"
+                :key="cat.id"
+                lg="3"
+                md="4"
+                sm="6"
+                cols="12"
+                class="mb-4"
+                >
+                <CatCard :cat="cat" />
+            </b-col>
+        </b-row>
     </div>
 </template>
