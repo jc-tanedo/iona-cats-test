@@ -14,12 +14,24 @@ const props = defineProps({
 const cats = reactive([] as Record<string, any>[]);
 const isLoading = ref(true);
 const isEmpty = computed((): boolean => !cats.length);
+const totalCats = ref(-Infinity);
 
-const fetchCats = async (breedId: string) => {
+const pagination = reactive({
+    page: 0,
+    limit: 10,
+    order: 'asc',
+});
+
+const fetchCats = async (breedId: string, fresh = false) => {
     isLoading.value = true;
-    cats.splice(0, cats.length);
+    if (fresh) {
+        cats.splice(0, cats.length);
+    }
+
     try {
-        cats.push(...await getCatsByBreed(breedId));
+        const response = await getCatsByBreed(breedId, pagination);
+        cats.push(...response.data);
+        totalCats.value = response.total;
     } catch (e) {
         console.error(e);
     }
@@ -27,9 +39,14 @@ const fetchCats = async (breedId: string) => {
     isLoading.value = false;
 };
 
+const fetchNextPage = () => {
+    pagination.page++;
+    fetchCats(props.breedId);
+};
+
 watch(
     () => props.breedId,
-    (breedId: string) => fetchCats(breedId),
+    (breedId: string) => fetchCats(breedId, true),
     { immediate: true },
 );
 </script>
@@ -41,7 +58,8 @@ watch(
     <div v-else-if="isEmpty">
         No results
     </div>
-    <div class="d-grid gap-4" v-else>
+
+    <div class="d-grid gap-4">
         <b-row>
             <b-col
                 v-for="cat in cats"
@@ -55,5 +73,14 @@ watch(
                 <CatCard :cat="cat" />
             </b-col>
         </b-row>
+    </div>
+
+    <div v-if="totalCats > cats.length">
+        <b-button
+            variant="success"
+            @click="fetchNextPage"
+            >
+            {{ isLoading ? 'Loading cats...' : 'Show more' }}
+        </b-button>
     </div>
 </template>

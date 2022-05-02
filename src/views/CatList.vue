@@ -41,7 +41,5 @@ onMounted(() => {
     </b-col>
 
     <CatGrid v-if="selectedBreed" :breed-id="selectedBreed" />
-
-    <b-button variant="primary">Load More</b-button>
   </main>
 </template>
