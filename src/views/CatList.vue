@@ -2,9 +2,11 @@
 import { reactive, onMounted, ref } from 'vue';
 import { getBreeds } from '../services/cat-api-service';
 
+import CatGrid from '../components/CatGrid.vue';
+
 let breeds = reactive([] as Record<string, any>[]);
 
-const selectedBreed = ref('walao');
+const selectedBreed = ref('');
 
 const fetchBreeds = async () => {
     try {
@@ -32,6 +34,8 @@ onMounted(() => {
         text-field="name"
         value-field="id"
         />
+
+    <CatGrid v-if="selectedBreed" :breed-id="selectedBreed" />
 
     <b-button variant="primary">Load More</b-button>
   </main>
