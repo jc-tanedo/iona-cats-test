@@ -5,6 +5,11 @@ import { RouterView } from 'vue-router';
 <template>
   <main class="main">
     <RouterView />
+    <b-container
+      :toast="{root: true}"
+      fluid="sm"
+      position="position-fixed"
+      />
   </main>
 </template>
 

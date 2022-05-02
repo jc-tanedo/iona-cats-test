@@ -4,6 +4,10 @@ import { getCatsByBreed } from '../services/cat-api-service';
 
 import CatCard from '../components/CatCard.vue';
 
+import config from '../config';
+import Toast from '../common/toast';
+const { showError, showSuccess } = Toast();
+
 const props = defineProps({
     breedId: {
         type: String,
@@ -31,8 +35,14 @@ const fetchCats = async (breedId: string, fresh = false) => {
     try {
         const response = await getCatsByBreed(breedId, pagination);
         cats.push(...response.data);
-        totalCats.value = response.total;
+        totalCats.value = +response.total;
+
+        if (cats.length === totalCats.value) {
+            showSuccess(config.MESSAGES.SUCCESS_ALL_CATS_FETCHED);
+        }
+
     } catch (e) {
+        showError(config.MESSAGES.ERROR_FETCHING_CATS);
         console.error(e);
     }
 

@@ -4,12 +4,17 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { getImageById } from '@/services/cat-api-service';
 
+import config from '../config';
+import Toast from '../common/toast';
+const { showError } = Toast();
+
 const image = ref({} as Record<string, any>);
 
 const fetchImage = async (id: string) => {
     try {
         image.value = await getImageById(id);
     } catch (e) {
+        showError(config.MESSAGES.ERROR_FETCHING_CATS);
         console.error(e);
     }
 };
@@ -28,7 +33,7 @@ const goBack = () => {
 
 watch(
     () => route.params.catId as string,
-    (catId: string) => fetchImage(catId),
+    (catId: string) => catId && fetchImage(catId),
     { immediate: true },
 );
 </script>

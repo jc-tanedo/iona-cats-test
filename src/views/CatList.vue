@@ -4,6 +4,10 @@ import { getBreeds } from '../services/cat-api-service';
 import CatGrid from '../components/CatGrid.vue';
 import { useRoute } from 'vue-router';
 
+import config from '../config';
+import Toast from '../common/toast';
+const { showError } = Toast();
+
 const route = useRoute();
 
 let breeds = reactive([] as Record<string, any>[]);
@@ -18,6 +22,7 @@ const fetchBreeds = async () => {
                 || breeds[0].id;
         }
     } catch (e) {
+        showError(config.MESSAGES.ERROR_FETCHING_CATS);
         console.error(e);
     }
 };
