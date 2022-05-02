@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <header>
-    Cat Browser
-  </header>
-
-  <RouterView />
+  <main class="main">
+    <RouterView />
+  </main>
 </template>
 
 <style>
-@import '@/assets/base.css';
+.main {
+  padding: 4rem;
+}
 </style>
