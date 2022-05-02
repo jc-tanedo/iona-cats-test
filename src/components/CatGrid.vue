@@ -11,7 +11,7 @@ const props = defineProps({
 
 const cats = reactive([] as Record<string, any>[]);
 const isLoading = ref(true);
-const isEmpty = computed((cats: Record<string, any>[]): boolean => !cats.length);
+const isEmpty = computed((): boolean => !cats.length);
 
 const fetchCats = async (breedId: string) => {
     isLoading.value = true;
